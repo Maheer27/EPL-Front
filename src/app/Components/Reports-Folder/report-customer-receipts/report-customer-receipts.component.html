@@ -1,0 +1,140 @@
+<main id="main" class="main">
+ 
+ 
+  <div class="col ">
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title" class="card-title"> العميل </h3>
+
+        <div class="row justify-content-between">
+          <div class="col-xs-12 col-12 col-md-4 form-group ">
+            <label for="Date" class="col-form-label">التاريخ </label>
+            <input type="text" placeholder="Daterangepicker" class="form-control" bsDaterangepicker
+              [bsConfig]="{ isAnimated: true ,containerClass: 'theme-dark-blue'}" [(ngModel)]=" CustRangeValue">
+          </div>
+          <div class="col-12 col-lg-6 ">
+            <label for="inputText" class="col-form-label">اسم العميل</label>
+            <div class="col-sm-10">
+              <div>
+                <ngx-select
+                [items]="customers"
+                [(ngModel)]="customerID"
+                (select)="fillCustomerReceipts()"
+                optionValueField="id"
+                optionTextField="name"
+              ></ngx-select>
+
+
+
+
+                <!-- <mat-form-field>
+                  <mat-select [(value)]="customerID"  (selectionChange)="fillCustomerReceipts()" >
+                    <mat-option *ngFor="let custmer of customers" [value]="custmer.id">
+                      {{ custmer.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+ 
+  <div class="pagetitle">
+    <h1>تقرير فواتير عميل</h1>
+    <nav class="my-3">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a routerLink="/Home">الصفحة الرئيسية</a>
+        </li>
+        <li class="breadcrumb-item"></li>
+        <li class="breadcrumb-item active">التقارير</li>
+      </ol>
+    </nav>
+  </div>
+  <section class="section" id="print">
+    <div class="column row-md">
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="text-center mt-2">
+             
+                <h1 class="card-title">فواتير عميل</h1>
+              </div>
+              <h3 class="text-start mt-3">{{ Date }}</h3>
+            </div>
+            <div class="col">
+              <div class="card overflow-auto">
+                <div class="card-body">
+                  <table class="table overflow-scroll">
+                    <thead class="">
+                      <tr class="text-center m-3 p-2">
+                        <th>كود</th>
+                        <th class="text-center">اسم العميل</th>
+                        <th class="text-center">الاجمالي</th>
+                        <th class="text-center">المدفوع</th>
+                        <th class="text-center">تفاصيل العمليه</th>
+                        <th class="text-center">التاريخ</th>
+                        <th class="text-center">ملاحظات</th>
+                        <th class="text-center">رقم الفاتورة</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        class="text-center"
+                        *ngFor="let item of transactionsReceipts"
+                      >
+                        <th>{{ item.id }}</th>
+                        <td>{{ item.Name }}</td>
+                        <td>{{ item.paid + item.remaining }}</td>
+                        <td>{{ item.paid }}</td>
+
+                        <td>
+                          <div *ngIf="item.operation == 2">
+                            فاتورة بيع رقم {{ item.operationID }}
+                          </div>
+                          <div *ngIf="item.operation == 5 && item.type == 1">
+                            {{ item.id }}توريد مبلغ مالى رقم
+                          </div>
+                          <div *ngIf="item.operation == 5 && item.type == 0">
+                            {{ item.id }} دفع مبلغ مالي
+                          </div>
+                        </td>
+                        <td>{{ item.date }}</td>
+                        <td>{{ item.notes }}</td>
+                        <td>
+                          <a
+                            [routerLink]="[
+                              '/ExportRecieptPrint/',
+                              item.operationID
+                            ]"
+                            routerLinkActive="router-link-active"
+                            >{{ item.operationID }}</a
+                          >
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+         
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="col">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex justify-content-center">
+          <button class="btn btn-primary my-3" (click)="Print()">طباعه</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
